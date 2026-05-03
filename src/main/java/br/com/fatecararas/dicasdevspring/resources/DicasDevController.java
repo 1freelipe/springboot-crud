@@ -77,9 +77,16 @@ public class DicasDevController {
             updateEntity.setTitulo(dicasDevEntity.getTitulo());
             updateEntity.setDescricao(dicasDevEntity.getDescricao());
             repository.save(updateEntity);
+
+            // Retornando a URL do componente modificado dentro do banco
+            URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(updateEntity.getId())
+                .toUri();
     
             // Retornando a resposta
-            return ResponseEntity.ok().body(updateEntity);
+            return ResponseEntity.created(uri).build();
         } catch (RuntimeException e) {
             // Capturando o Runtime se for lançado e logando a mensagem
             System.err.println(e.getMessage());
